@@ -101,7 +101,7 @@ using System;
 public class ThisIsAPublicType { ... }
 
 // 以下类型的可见性为 internal，只可由本程序集中的代码访问
-public class ThisIsAnInternalType { ... }
+internal class ThisIsAnInternalType { ... }
 
 // 由于没有显式声明类型的可见性，所以以下类型的可见性为 internal
 class ThisIsAlsoAnInternalType { ... }
@@ -136,7 +136,7 @@ using System;
 internal sealed class Foo {
     private static Object SomeMethod() {
         // 这个“Wintellect” 程序集能访问另一个程序集的 internal 类型，
-        // 就好像那时 public 类型
+        // 就好像那是 public 类型
         SomeInternalType sit = new SomeInternalType();
         return sit;
     }
@@ -231,7 +231,7 @@ public static class AStaticClass {
 
 如今软件变得相当复杂，而且用户希望应用程序提供更丰富的功能，如 GUI、菜单、鼠标输入、手写板输入、打印输出、网络功能等。正是由于这个原因，操作系统和开发平台在这几年中取得了迅猛发展。另外，应用程序对的开发也必须分工。不能再像以前那样，一个或几个开发人员就能写出一个应用程序需要的全部代码。这样做要么不可能，要么效率太低。现在的应用程序一般都包含了由许多不同的公司生成的代码。这些代码通过面向对象编程机制契合到一起。
 
-**组件软件编程**(Component Sfoteware Programming, CSP)正是 OOP 发展到极致的成果。下面列举组件的一些特点。
+**组件软件编程**(Component Software Programming, CSP)正是 OOP 发展到极致的成果。下面列举组件的一些特点。
 
 * 组件(.NET Framework 称为程序集)有“已经发布”的意思。
 * 组件有自己的标识(名称、版本、语言文化和公钥)
@@ -239,22 +239,22 @@ public static class AStaticClass {
 * 组件清楚指明它所依赖的组件(引用元数据表)。
 * 组件应编档它的类和成员。C# 语言通过源代码内的 XML 文档和编译器的 **/doc** 命令行开关提供这个功能。
 * 组件必须指定它需要的安全权限。CLR 的代码访问安全性(Code Access Security， CAS)机制提供这个功能。
-* 组件要发布在任何“维护版本”中都不会改变的接口(对象模型)。“维护版本”(servicing version)代表组件的新版本，它向后兼容组件的原始版本。通常，“维护版本”包含bug修复、安全补丁或者一些小的功能增强。但在“维护版本”中，不能要求任何新的依赖关系，也不能要求任何附加的安全权限。
+* 组件要发布在任何“维护版本”中都不会改变的接口(对象模型)。“维护版本”(servicing version)代表组件的新版本，它向后兼容组件的原始版本。通常，“维护版本”包含 bug 修复、安全补丁或者一些小的功能增强。但在“维护版本”中，不能要求任何新的依赖关系，也不能要求任何附加的安全权限。
 
 如最后一点所述，CSP 有很大一部分涉及版本控制。组件随着时间而改变，并根据不同的时间来发布。版本控制使 CSP 的复杂性上升到了 OOP 无法企及的高度。(在 OOP 中，全部代码都由一家公司编写和测试，并作为一个整体发布。)本节将重点放在组件的版本控制上。
 
-.NET Framework 中的版本号包含 4 个部分；主版本号(major version)、次版本号(minor version)、内部版本号(build number)和修订号(revision)。例如，版本号为 1.2.3.4 的程序集，其主版本号为 1，次版本号为 2，内部版本号为 3，修订号 4。major/minor 部分通常代表程序集的一个连续的、稳定的功能集，而build/revision 部分通常代表对这个功能集的一次维护。
+.NET Framework 中的版本号包含 4 个部分；主版本号(major version)、次版本号(minor version)、内部版本号(build number)和修订号(revision)。例如，版本号为 1.2.3.4 的程序集，其主版本号为 1，次版本号为 2，内部版本号为 3，修订号 4。major/minor 部分通常代表程序集的一个连续的、稳定的功能集，而 build/revision 部分通常代表对这个功能集的一次维护。
 
 假定某公司发布了版本号为 2.7.0.0 的程序集。之后，为了修复该组件的 bug，他们可以生成一个新的程序集，并只改动版本号的 build/revision 部分，比如 2.7.1.34。这表明该程序集是维护版本，向后兼容原始版本(2.7.0.0)。
 
 另一方面，假定该公司想生成程序集的新版本，而且由于发生了重大变化，所以不准备向后兼容程序集的原始版本。在这种情况下，公司实际是要创建全新组件，major/minor 版本号(比如 3.0.0.0)应该和原来的组件不同。
 > 注意 此处只是说明应该如何看待版本号。遗憾的是，CLR 不以这种方式看待版本号。现在，CLR 将版本号看成是固定值，如果某个程序集依赖版本号为1.2.3.4 的另 个程序集，CLR 只会尝试加载版本号为 1.2.3.4 的程序集(除非设置了绑定重定向)。
 
-前面讨论了如何使用版本号更新组件的标识，从而反映出组件的新版本。下面要讨论如何利用 CLR 和编程语言(比如C#)提供的功能来自动适应组件可能发生的变化。
+前面讨论了如何使用版本号更新组件的标识，从而反映出组件的新版本。下面要讨论如何利用 CLR 和编程语言(比如 C#)提供的功能来自动适应组件可能发生的变化。
 
 将一个组件(程序集)中定义的类型作为另一个组件(程序集)中的一个类型的基类使用时，便会发生版本控制问题。显然，如果基类的版本(被修改得)低于派生类，派生类的行为也会改变，这可能造成类的行为失常。在多态情形中，由于派生类型会重写基类型定义的虚方法，所以这个问题显得尤其突出。
 
-C#提供了 5 个能影响组件版本控制的关键字，可将它们应用于类型以及/或者类型成员。这些关键字直接对应 CLR 用于支持组件版本控制的功能。表 6-2 总结了与组件版本控制相关的 C# 关键字，并描述了每个关键字如何影响类型或者类型成员的定义。
+C# 提供了 5 个能影响组件版本控制的关键字，可将它们应用于类型以及/或者类型成员。这些关键字直接对应 CLR 用于支持组件版本控制的功能。表 6-2 总结了与组件版本控制相关的 C# 关键字，并描述了每个关键字如何影响类型或者类型成员的定义。
 
 表 6-2 C# 关键字及其对组件版本控制的影响  
 |C#关键字|类型|方法/属性/事件|常量/字段|
@@ -271,7 +271,7 @@ C#提供了 5 个能影响组件版本控制的关键字，可将它们应用于
 
 本节重点是方法，但我们的讨论也与虚属性和虚事件密切相关。属性和事件实际作为方法实现，本书后面会用专门的章来讨论它们。
 
-方法代表在类型或类型的实例上执行某些操作的代码。在类型上执行操作，称为**静态方法**；在类型的实例上执行操作，称为**非静态方法**。所有方法都有名称、签名和返回类型(可为`void`)。CLR 允许类型定义多个同名方法，只要每个方法都有一组不同的参数或者一个不同的返回类型。所以，完全能定义两个同名、同参数的方法，只要两者返回类型不同。但除了 IL 汇编语言，我没有发现任何利用了这一“特点”的语言。大多数语言(包括C#)在判断方法的唯一性时，除了方法名之外，都只以参数为准，方法返回类型会被忽略。(C#在定义转换操作符方法时实际上放宽了此限制，详见第 8 章。)
+方法代表在类型或类型的实例上执行某些操作的代码。在类型上执行操作，称为**静态方法**；在类型的实例上执行操作，称为**非静态方法**。所有方法都有名称、签名和返回类型(可为`void`)。CLR 允许类型定义多个同名方法，只要每个方法都有一组不同的参数或者一个不同的返回类型。所以，完全能定义两个同名、同参数的方法，只要两者返回类型不同。但除了 IL 汇编语言，我没有发现任何利用了这一“特点”的语言。大多数语言(包括 C#)在判断方法的唯一性时，除了方法名之外，都只以参数为准，方法返回类型会被忽略。(C# 在定义转换操作符方法时实际上放宽了此限制，详见第 8 章。)
 
 以下 `Employee` 类定义了 3 种不同的方法：
 
@@ -337,7 +337,7 @@ public sealed class Program {
 
 注意，C# 编译器用 `call` 指令调用 `Console` 的 `WriteLine` 方法。这在意料之中，因为 `WriteLine` 是静态方法。接着用`callvirt` 指令调用 `GetHashCode`，这也在意料之中，因为 `GetHashCode` 是虚方法。最后，C# 编译器用 `callvirt` 指令调用 `GetType` 方法。这就有点出乎意料了，因为 `GetType` 不是虚方法，所以在 JIT 编译好的代码中，会直接以非虚方式调用 `GetType`。
 
-那么，为什么 C#编译器不干脆生成 `call` 指令呢？答案是C#团队认为，JIT编译器应生成代码来验证发出调用的对象不为 `null`。这意味着对非虚实例方法的调用要稍微慢一点。这也意味着以下C# 代码将抛出 `NullReferenceException` 异常。注意，在另一些编程语言中，以下代码能正常工作。
+那么，为什么 C# 编译器不干脆生成 `call` 指令呢？答案是 C# 团队认为，JIT 编译器应生成代码来验证发出调用的对象不为 `null`。这意味着对非虚实例方法的调用要稍微慢一点。这也意味着以下 C# 代码将抛出 `NullReferenceException` 异常。注意，在另一些编程语言中，以下代码能正常工作。
 
 ```C#
 using System;
@@ -351,8 +351,8 @@ public sealed class Program {
 }
 ```
 
-上述代码理论上并无问题。变量`p`确实为`null`，但在调用非虚方法(`GetFive`)时，CLR 唯一需要知道的就是`p`的数据类型(`Program`)。如果真的调用`GetFive`，`this`实参值是`null`。由于`GetFive` 方法内部并未使用该实参，所以不会抛出 `NullReferenceException` 异常。但由于C# 编译器生成 `callvirt` 而不是 `call` 指令，所以上述代码抛出了 `NullReferenceException` 异常。
-> 重要提示 将方法定义为非虚方法后，将来永远都不要把它更改为虚方法。这是因为某些编译器会用 `call` 而不是 `callvirt` 调用非虚方法。如果方法从非虚变成虚，而引用代码没有重新编译，会以非虚方式调用虚方法，造成应用程序行为无法预料。用 C# 写的引用代码不会出问题，因为C# 用 `callvirt` 指令调用所有实例方法。但如果引用代码是用其他语言写的，就可能出问题。
+上述代码理论上并无问题。变量`p`确实为`null`，但在调用非虚方法(`GetFive`)时，CLR 唯一需要知道的就是`p`的数据类型(`Program`)。如果真的调用`GetFive`，`this`实参值是`null`。由于`GetFive` 方法内部并未使用该实参，所以不会抛出 `NullReferenceException` 异常。但由于 C# 编译器生成 `callvirt` 而不是 `call` 指令，所以上述代码抛出了 `NullReferenceException` 异常。
+> 重要提示 将方法定义为非虚方法后，将来永远都不要把它更改为虚方法。这是因为某些编译器会用 `call` 而不是 `callvirt` 调用非虚方法。如果方法从非虚变成虚，而引用代码没有重新编译，会以非虚方式调用虚方法，造成应用程序行为无法预料。用 C# 写的引用代码不会出问题，因为 C# 用 `callvirt` 指令调用所有实例方法。但如果引用代码是用其他语言写的，就可能出问题。
 
 编译器有时用 `call` 而不是 `callvirt` 调用虚方法。虽然刚开始有点难以理解，但以下代码证明了有时真的需要这样做：
 
@@ -371,13 +371,13 @@ internal class SomeClass {
 }
 ```
 
-调用虚方法 `base.ToString` 时，C# 编译器生成 `call` 指令来确保以非虚方式调用基类的 `ToString` 方法。这是必要的，因为如果以虚方式调用 `ToString` ，调用会递归执行，直至线程栈溢出，这显然不是你所期望的。
+调用虚方法 `base.ToString` 时，C# 编译器生成 `call` 指令来确保以非虚方式调用基类的 `ToString` 方法。这是必要的，因为如果以虚方式调用 `ToString`，调用会递归执行，直至线程栈溢出，这显然不是你所期望的。
 
-编译器调用值类型定义的方法时倾向于使用 `call` 指令，因为值类型时密封的。这意味着即使值类型含有虚方法也不用考虑多态性，这使调用更快。此外，值类型实例的本质保证它永不为 `null`，所以永远不抛出 `NullReferenceException` 异常。最后，如果以虚方式调用值类型中的虚方法，CLR 要获取对值类型的类型对象的引用，以便引用(类型对象中的)方法表，这要求对值类型装箱。装箱对堆造成更大压力，迫使进行更频繁的垃圾回收，使性能受到影响。
+编译器调用值类型定义的方法时倾向于使用 `call` 指令，因为值类型是密封的。这意味着即使值类型含有虚方法也不用考虑多态性，这使调用更快。此外，值类型实例的本质保证它永不为 `null`，所以永远不抛出 `NullReferenceException` 异常。最后，如果以虚方式调用值类型中的虚方法，CLR 要获取对值类型的类型对象的引用，以便引用(类型对象中的)方法表，这要求对值类型装箱。装箱对堆造成更大压力，迫使进行更频繁的垃圾回收，使性能受到影响。
 
 无论用 `call` 还是 `callvirt` 调用实例方法或虚方法，这些方法通常接收隐藏的 `this` 实参作为方法第一个参数。`this` 实参引用要操作的对象。
 
-设计类型时应尽量减少虚方法数量。首先，调用虚方法的速度比调用非虚方法慢。其次，JIT编译器不能内嵌(inline)虚方法，这进一步影响性能。第三，虚方法使组件版本控制变得更脆弱，详情参见下一节。第四，定义基类型时，经常要提供一组重载的简便方法(convenience method)。如果希望这些方法是多态的，最好的办法就是使最复杂的方法成为虚方法，使所有重载的简便方法成为非虚方法。顺便说一句，遵循这个原则，还可在改善组件版本控制的同时，不至于对派生类型产生负面影响。下面是一个例子：  
+设计类型时应尽量减少虚方法数量。首先，调用虚方法的速度比调用非虚方法慢。其次，JIT 编译器不能内嵌(inline)虚方法，这进一步影响性能。第三，虚方法使组件版本控制变得更脆弱，详情参见下一节。第四，定义基类型时，经常要提供一组重载的简便方法(convenience method)。如果希望这些方法是多态的，最好的办法就是使最复杂的方法成为虚方法，使所有重载的简便方法成为非虚方法。顺便说一句，遵循这个原则，还可在改善组件版本控制的同时，不至于对派生类型产生负面影响。下面是一个例子：  
 
 ```C#
 public class Set {
@@ -564,7 +564,7 @@ namespace CompanyA {
 
 编译器警告 `Phone` 和 `BetterPhone` 都提供了 `EstablishConnection` 方法，而且两者的语义可能不一致。只是简单地重新编译`BetterPhone` ，可能无法获得和使用第一个版本的 `Phone` 类型时相同的行为。
 
-如果CompanyB 认定 `EstablishConnection` 方法在两个类型中的语义不一致，CompanyB 可以告诉编译器使用 `BetterPhone` 类中定义的`Dial` 和 `EstablishConnection` 方法，它们与基类型 `Phone` 中定义的 `EstablishConnection`方法没有关系。CompanyB 可以为 `EstablishConnection` 方法添加 `new` 关键字来告诉编译器这一点。
+如果 CompanyB 认定 `EstablishConnection` 方法在两个类型中的语义不一致，CompanyB 可以告诉编译器使用 `BetterPhone` 类中定义的`Dial` 和 `EstablishConnection` 方法，它们与基类型 `Phone` 中定义的 `EstablishConnection`方法没有关系。CompanyB 可以为 `EstablishConnection` 方法添加 `new` 关键字来告诉编译器这一点。
 
 ```C#
 namespace CompanyB {
@@ -598,11 +598,11 @@ Phone.Dial
 Phone.EstablishConnection
 ```
 
-这个输出表明，在 `Main` 方法中调用 `Dial`，调用的是 `BetterPhone` 类定义的新 `Dial` 方法。后者调用了同样由 `BetterPhone` 类定义的虚方法 `EstablishConnection`。`BetterPhone` 的 `EstablishConnection` 方法返回后， 将调用 `Phone` 的 `Dial` 方法调用了`EstablishConnection`，但由于 `BetterPhone` 的 `EstablishConnection` 使用 `new` 进行了标识，所以不认为 `BetterPhone` 的 `EstablishConnection` 是对 `Phone` 的虚方法 `EstablishConnection`的重写。最终结果是，`Phone` 的 `Dial` 方法调用了 `Phone` 的 `EstablishConnection` 方法——这正是我们所期望的。
+这个输出表明，在 `Main` 方法中调用 `Dial`，调用的是 `BetterPhone` 类定义的新 `Dial` 方法。后者调用了同样由 `BetterPhone` 类定义的虚方法 `EstablishConnection`。`BetterPhone` 的 `EstablishConnection` 方法返回后， 将调用 `Phone` 的 `Dial` 方法调用了 `EstablishConnection`，但由于 `BetterPhone` 的 `EstablishConnection` 使用 `new` 进行了标识，所以不认为 `BetterPhone` 的 `EstablishConnection` 是对 `Phone` 的虚方法 `EstablishConnection`的重写。最终结果是，`Phone` 的 `Dial` 方法调用了 `Phone` 的 `EstablishConnection` 方法——这正是我们所期望的。
 
 > 注意 如果编译器像原生 C++ 编译器那样默认将方法视为重写，`BetterPhone` 的开发者就不能使用 `Dial` 和 `EstablishConnection` 方法名了。这极有可能造成整个源代码 base 的连锁反应，破坏源代码和二进制兼容性。这种波及面太大的改变是我们不希望的，尤其是中大型的项目。但是，如果更改方法名只会造成源代码发生适度更新，就应该更改方法名，避免 `Dial` 和 `EstablishConnection` 方法的两种不同的含义使开发人员产生混淆。
 
-还有一个办法是，`CompanyB` 可以获得 `CompanyA` 的新版本 `Phone` 类型，并确定 `Dial` 和 `EstablishConnection` 在 `Phone` 中的语义正好是他们所希望的。这种情况下，`CompanyB` 可通过完全移除 `Dial` 方法来修改他们的 `BetterPhone` 类型。另外，由于 `CompanyB` 现在希望告诉编译器，`BetterPhone` 的 `EstablishConnection` 方法和 `Phone` 的 `EstablishConnection` 方法是相关的，所以必须移除`new` 关键字。但是，仅仅移除 `new` 关键字还不够，因为编译器目前还无法准确判断 `BetterPhone` 的 `EstablishConnection` 方法的意图。为了准确表示意图，`CompanyB` 的开发人员还必须将 `BetterPhone`的`EstablishConnection`方法由`virtual`改变为`override`。以下代码展示了新版本的 `BetterPhone` 类。
+还有一个办法是，`CompanyB` 可以获得 `CompanyA` 的新版本 `Phone` 类型，并确定 `Dial` 和 `EstablishConnection` 在 `Phone` 中的语义正好是他们所希望的。这种情况下，`CompanyB` 可通过完全移除 `Dial` 方法来修改他们的 `BetterPhone` 类型。另外，由于 `CompanyB` 现在希望告诉编译器，`BetterPhone` 的 `EstablishConnection` 方法和 `Phone` 的 `EstablishConnection` 方法是相关的，所以必须移除 `new` 关键字。但是，仅仅移除 `new` 关键字还不够，因为编译器目前还无法准确判断 `BetterPhone` 的 `EstablishConnection` 方法的意图。为了准确表示意图，`CompanyB` 的开发人员还必须将 `BetterPhone` 的 `EstablishConnection` 方法由 `virtual` 改变为 `override`。以下代码展示了新版本的 `BetterPhone` 类。
 
 ```C#
 namespace CompanyB {
@@ -627,4 +627,4 @@ Phone.Dial
 BetterPhone.EstablishConnection
 ```
 
-该输出结果表明，在 `Main` 中调用 `Dial` 方法，调用的是由 `Phone` 定义、并由 `BetterPhone` 继承的 `Dial` 方法。然后，当 `Phone` 的`Dial` 方法调用虚方法 `EstablishConnection` 时，实际调用的是 `BetterPhone` 类的 `EstablishConnection`方法，因为它重写了由`Phone`定义的虚方法`EstablishConnection`。
+该输出结果表明，在 `Main` 中调用 `Dial` 方法，调用的是由 `Phone` 定义、并由 `BetterPhone` 继承的 `Dial` 方法。然后，当 `Phone` 的 `Dial` 方法调用虚方法 `EstablishConnection` 时，实际调用的是 `BetterPhone` 类的 `EstablishConnection`方法，因为它重写了由 `Phone` 定义的虚方法 `EstablishConnection`。
